@@ -1,0 +1,127 @@
+project:
+  name: nse-equity-research
+  timezone: Asia/Kolkata
+  random_seed: 20260925
+  result_root: results
+
+backtest:
+  capital: 100000
+  capital_scenarios: [25000, 50000, 100000]
+  lookback_months: 2
+  start_date: null
+  end_date: null
+  warmup_calendar_days: 370
+  interval: 1d
+  fill_at_next_bar_open: true
+  ambiguous_stop_target: stop_first
+
+universe:
+  source: nse_nifty500
+  constituents_url: https://archives.nseindia.com/content/indices/ind_nifty500list.csv
+  symbols_file: data/universe.csv
+  min_history_rows: 220
+  min_avg_volume: 500000
+  min_avg_traded_value: 50000000
+  min_price: 50
+  liquidity_lookback: 20
+  max_symbols: null
+  benchmark: ^NSEI
+
+regime:
+  ema_fast: 20
+  ema_slow: 50
+  ema_long: 200
+  adx_period: 14
+  adx_trend_threshold: 20
+  india_vix_symbol: ^INDIAVIX
+  india_vix_high_threshold: 25
+
+strategies:
+  enabled:
+    - trend_following
+    - momentum
+    - breakout_20
+    - breakout_50
+    - breakout_previous_day
+    - pullback
+    - mean_reversion
+    - swing_1_3
+    - swing_3_5
+    - swing_5_10
+    - swing_10_20
+    - vwap_intraday
+  reward_risk: 1.5
+  atr_period: 14
+  atr_stop_multiple: 2.0
+  adx_minimum: 20
+  volume_multiple: 1.3
+  rsi_period: 14
+  entry_cutoff: "14:45"
+  intraday_squareoff: "15:25"
+  exit_mode: fixed_r
+  exit_comparison_modes: [stop_loss, fixed_r, partial_trailing, atr_trailing, max_holding]
+  partial_exit_fraction: 0.5
+  atr_trailing_multiple: 2.0
+  stop_mode: atr
+  reward_risk_choices: [1, 1.5, 2, 2.5, 3]
+  signal_score_weights:
+    trend: 0.25
+    momentum: 0.20
+    volume: 0.15
+    regime: 0.15
+    liquidity: 0.10
+    volatility: 0.10
+    risk_reward: 0.05
+
+risk:
+  risk_per_trade: 0.01
+  max_daily_loss: 0.02
+  max_portfolio_drawdown: 0.10
+  max_open_positions: 5
+  max_single_position_fraction: 0.25
+  max_gross_exposure_fraction: 1.00
+  max_sector_exposure_fraction: 0.25
+  max_expected_slippage_bps: 10
+  allow_short_intraday: true
+
+costs:
+  exchange: NSE
+  intraday_brokerage_rate: 0.0003
+  brokerage_cap_per_order: 20
+  delivery_brokerage_rate: 0.0
+  delivery_stt_rate: 0.001
+  intraday_sell_stt_rate: 0.00025
+  exchange_transaction_rate: 0.0000307
+  sebi_rate: 0.000001
+  gst_rate: 0.18
+  delivery_stamp_buy_rate: 0.00015
+  intraday_stamp_buy_rate: 0.00003
+  delivery_dp_charge_per_sell: 15.34
+  slippage_bps: 5
+
+paper:
+  enabled: true
+  database: data/paper_trades.sqlite
+
+forward_paper:
+  enabled: false
+  starting_capital: null
+  provider: licensed_nse_cm_eod
+  licensed_dataset_path: data/licensed_nse_cm_eod/nse_cm_eod_dataset.csv
+  market_data_dir: forward/market_data
+  index_data_dir: data/nse_exports
+  database: data/paper_trading/forward_paper.sqlite
+  trading_calendar_path: data/paper_trading/nse_cash_holidays_2026.csv
+  max_daily_price_jump_fraction: 0.40
+
+live_trading:
+  enabled: false
+  kill_switch_file: HALT_LIVE_TRADING
+
+data:
+  cache_dir: data/cache
+  raw_dir: data/raw
+  processed_dir: data/processed
+  provider: yfinance
+  auto_adjust: false
+  intraday_max_age_days: 59

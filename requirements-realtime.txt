@@ -1,0 +1,3 @@
+# Optional Phase 4A NSE quote snapshots through the user-authorized Jugaad Data package.
+jugaad-data>=0.35.9,<0.36
+growwapi>=1.5,<2

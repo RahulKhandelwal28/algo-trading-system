@@ -1,0 +1,31 @@
+# Python environments and generated files
+.venv/
+venv/
+__pycache__/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+
+# Local credentials and environment files
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Local datasets, licensed/vendor files, caches, and trading results
+/data/
+/results/
+/logs/
+*.sqlite
+*.sqlite3
+*.db
+
+# OS/editor noise
+.DS_Store
+.idea/
+.vscode/
